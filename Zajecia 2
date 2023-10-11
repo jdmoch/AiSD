@@ -1,1 +1,58 @@
+namespace WinFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int liczbaN = (int)nud.Value;
+            long wynik = Fib2(liczbaN);
+
+            MessageBox.Show(wynik.ToString());
+        }
+
+  
+
+        int fib(int n)
+        {
+            if (n == 0) 
+                return 0;
+            if (n == 1)
+                return 1;
+
+           
+                return fib(n - 1) + fib(n - 2);
+        }
+
+        long Fib2(int n)
+        {
+            if (n == 0 || n == 1)
+                return n;
+
+            long[] wyrazy = new long[n];
+            wyrazy[1] = 1;
+
+            for (int i =2; i< wyrazy.Length; i++)
+            {
+                wyrazy[i] = wyrazy[i - 1] + wyrazy[i - 2];
+            }
+
+            return wyrazy[n - 1] + wyrazy[n - 2];
+        }
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
+
+        }
+
+     
+    }
+}
+
+napisz funkcje ktora przyjmie dwa parametry jakies dodawanie

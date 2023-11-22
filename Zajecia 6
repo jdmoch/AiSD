@@ -1,1 +1,116 @@
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
+namespace AiSD_ISI_gr1_5
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            var w1 = new Węzeł(5);
+            var w2 = new Węzeł(3);
+            var w3 = new Węzeł(1);
+            var w4 = new Węzeł(2);
+            var w5 = new Węzeł(6);
+            var w6 = new Węzeł(4);
+            w1.dzieci.Add(w2);
+            w1.dzieci.Add(w3);
+            w1.dzieci.Add(w4);
+            w2.dzieci.Add(w5);
+            w2.dzieci.Add(w6);
+
+            var p1 = new Węzeł2(1);
+            var p2 = new Węzeł2(2);
+            var p3 = new Węzeł2(3);
+            var p4 = new Węzeł2(4);
+            var p5 = new Węzeł2(5);
+            var p6 = new Węzeł2(6);
+
+            p1.Add(p2);
+            p1.Add(p3);
+            p2.Add(p4);
+            p2.Add(p5);
+            p3.Add(p6);
+            p4.Add(p6);
+
+            DetectCycles(p1);
+        }
+
+        void DetectCycles(Węzeł2 root)
+        {
+            HashSet<Węzeł2> visited = new HashSet<Węzeł2>();
+            foreach (var node in root.sąsiad)
+            {
+                if (!visited.Contains(node))
+                {
+                    if (HasCycle(node, visited, root))
+                    {
+                        MessageBox.Show("Graf zawiera cykl!");
+                        return;
+                    }
+                }
+            }
+            MessageBox.Show("Graf nie zawiera cyklu.");
+        }
+
+        bool HasCycle(Węzeł2 current, HashSet<Węzeł2> visited, Węzeł2 parent)
+        {
+            visited.Add(current);
+            foreach (var neighbor in current.sąsiad)
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    if (HasCycle(neighbor, visited, current))
+                        return true;
+                }
+                else if (neighbor != parent)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public class Węzeł
+    {
+        public int wartość;
+        public List<Węzeł> dzieci = new List<Węzeł>();
+        public Węzeł(int liczba)
+        {
+            this.wartość = liczba;
+        }
+    }
+
+    public class Węzeł2
+    {
+        public int warto;
+        public List<Węzeł2> sąsiad = new List<Węzeł2>();
+        public Węzeł2(int liczba)
+        {
+            this.warto = liczba;
+        }
+        public void Add(Węzeł2 s)
+        {
+            if (s == this)
+            {
+                return;
+            }
+            if (!this.sąsiad.Contains(s))
+            {
+                this.sąsiad.Add(s);
+                s.sąsiad.Add(this);
+            }
+            if (!s.sąsiad.Contains(this))
+            {
+                s.sąsiad.Add(this);
+            }
+        }
+    }
+}

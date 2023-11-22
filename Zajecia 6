@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using System.IO.Pipes;
 
-namespace AiSD_ISI_gr1_5
+namespace kongopl
 {
     public partial class Form1 : Form
     {
@@ -10,8 +8,11 @@ namespace AiSD_ISI_gr1_5
         {
             InitializeComponent();
         }
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
-        private void btnStart_Click(object sender, EventArgs e)
+        }
+        private void button1_Click(object sender, EventArgs e)
         {
             var w1 = new Węzeł(5);
             var w2 = new Węzeł(3);
@@ -42,75 +43,75 @@ namespace AiSD_ISI_gr1_5
             DetectCycles(p1);
         }
 
-        void DetectCycles(Węzeł2 root)
-        {
-            HashSet<Węzeł2> visited = new HashSet<Węzeł2>();
-            foreach (var node in root.sąsiad)
+         void DetectCycles(Węzeł2 root)
             {
-                if (!visited.Contains(node))
+                HashSet<Węzeł2> visited = new HashSet<Węzeł2>();
+                foreach (var node in root.sąsiad)
                 {
-                    if (HasCycle(node, visited, root))
+                    if (!visited.Contains(node))
                     {
-                        MessageBox.Show("Graf zawiera cykl!");
-                        return;
+                        if (HasCycle(node, visited, root))
+                        {
+                            MessageBox.Show("Graf zawiera cykl!");
+                            return;
+                        }
                     }
                 }
+                MessageBox.Show("Graf nie zawiera cyklu.");
             }
-            MessageBox.Show("Graf nie zawiera cyklu.");
-        }
 
-        bool HasCycle(Węzeł2 current, HashSet<Węzeł2> visited, Węzeł2 parent)
-        {
-            visited.Add(current);
-            foreach (var neighbor in current.sąsiad)
+            bool HasCycle(Węzeł2 current, HashSet<Węzeł2> visited, Węzeł2 parent)
             {
-                if (!visited.Contains(neighbor))
+                visited.Add(current);
+                foreach (var neighbor in current.sąsiad)
                 {
-                    if (HasCycle(neighbor, visited, current))
+                    if (!visited.Contains(neighbor))
+                    {
+                        if (HasCycle(neighbor, visited, current))
+                            return true;
+                    }
+                    else if (neighbor != parent)
+                    {
                         return true;
+                    }
                 }
-                else if (neighbor != parent)
+                return false;
+            }
+        }
+
+        public class Węzeł
+        {
+            public int wartość;
+            public List<Węzeł> dzieci = new List<Węzeł>();
+            public Węzeł(int liczba)
+            {
+                this.wartość = liczba;
+            }
+        }
+
+        public class Węzeł2
+        {
+            public int warto;
+            public List<Węzeł2> sąsiad = new List<Węzeł2>();
+            public Węzeł2(int liczba)
+            {
+                this.warto = liczba;
+            }
+            public void Add(Węzeł2 s)
+            {
+                if (s == this)
                 {
-                    return true;
+                    return;
+                }
+                if (!this.sąsiad.Contains(s))
+                {
+                    this.sąsiad.Add(s);
+                    s.sąsiad.Add(this);
+                }
+                if (!s.sąsiad.Contains(this))
+                {
+                    s.sąsiad.Add(this);
                 }
             }
-            return false;
         }
     }
-
-    public class Węzeł
-    {
-        public int wartość;
-        public List<Węzeł> dzieci = new List<Węzeł>();
-        public Węzeł(int liczba)
-        {
-            this.wartość = liczba;
-        }
-    }
-
-    public class Węzeł2
-    {
-        public int warto;
-        public List<Węzeł2> sąsiad = new List<Węzeł2>();
-        public Węzeł2(int liczba)
-        {
-            this.warto = liczba;
-        }
-        public void Add(Węzeł2 s)
-        {
-            if (s == this)
-            {
-                return;
-            }
-            if (!this.sąsiad.Contains(s))
-            {
-                this.sąsiad.Add(s);
-                s.sąsiad.Add(this);
-            }
-            if (!s.sąsiad.Contains(this))
-            {
-                s.sąsiad.Add(this);
-            }
-        }
-    }
-}

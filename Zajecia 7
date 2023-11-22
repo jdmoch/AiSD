@@ -106,7 +106,6 @@ namespace kongopl
         }
     }
 
-
     public class Węzeł2
     {
         public int warto;
@@ -142,6 +141,16 @@ namespace kongopl
 
     }
 
-   
+    public class Węzeł3
+    {
+           public int wartość;
+           public List<Węzeł3> prawe = new List<Węzeł3>();
+           public List<Węzeł3> lewe = new List<Węzeł3>();
+           public List<Węzeł3> rodzic3 = new List<Węzeł3>();
+      
+    }
+
+   //bfs zrobic
+
    
 }

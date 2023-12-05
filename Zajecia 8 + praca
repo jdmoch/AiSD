@@ -184,6 +184,71 @@ public class Wezel3
     {
         return this.wartosc.ToString();
     }
+    //Praca domowa ktora jest wyzej 
+    //funkcja znajdz
+    public Wezel3 Znajdz(int liczba)
+    {
+        var current = this;
+
+        while (current != null)
+        {
+            if (liczba == current.wartosc)
+            {
+                return current;
+            }
+            else if (liczba < current.wartosc)
+            {
+                current = current.lewe;
+            }
+            else
+            {
+                current = current.prawe;
+            }
+        }
+
+        return null; // Element not found
+    }
+
+    // 2. Funkcja znajdz_min
+    public Wezel3 ZnajdzMin(Wezel3 w)
+    {
+        while (w.lewe != null)
+        {
+            w = w.lewe;
+        }
+
+        return w;
+    }
+
+    // 3. Funkcja znajdz_max
+    public Wezel3 ZnajdzMax(Wezel3 w)
+    {
+        while (w.prawe != null)
+        {
+            w = w.prawe;
+        }
+
+        return w;
+    }
+
+    // 4. Funkcja nastepnik
+    public Wezel3 Nastepnik(Wezel3 w)
+    {
+        if (w.prawe != null)
+        {
+            return ZnajdzMin(w.prawe);
+        }
+
+        var parent = w.rodzic;
+        while (parent != null && w == parent.prawe)
+        {
+            w = parent;
+            parent = parent.rodzic;
+        }
+
+        return parent;
+    }
+
 }
 class DrzewoBinarne
 {
@@ -233,4 +298,8 @@ class DrzewoBinarne
 
 
     }
+
+
+
+
 }
